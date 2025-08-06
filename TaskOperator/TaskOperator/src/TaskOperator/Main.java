@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 public class Main {
 	public static ArrayList<task> task = new ArrayList<task>();
-	public static int id = 0;
+	public static int superId = -1;
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
 		
@@ -58,8 +58,9 @@ public class Main {
 	}
 	private static void createTask(String name,ArrayList<String> tag,String info) {
 		task.add(new task());
-		id +=1;
-		task.get(id).setId(id);
+		superId ++;
+		int id = task.size()-1;
+		task.get(id).setId(superId);
 		task.get(id).setName(name);
 		for(String tmp:tag) {
 			task.get(id).addTag(tmp);
@@ -82,10 +83,21 @@ public class Main {
 								);
 		}
 	}
+	//idステータスとの一致でインデックスを特定
+	private static int searchId(int id) {
+		int c = 0;
+		for(task tmp :task) {
+			if(tmp.getId() == id) {
+				return c;
+			}
+			c++;
+		}
+	return c+1;
+	}
 	private static void completeTask() {
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("Input task id: ");
-		int id = scanner.nextInt();
+		int id = searchId(scanner.nextInt());
 		try {
 			task.get(id).completeTask();
 		}catch(Exception e) {
@@ -95,7 +107,7 @@ public class Main {
 	private static void removeTask() {
 		Scanner scanner = new Scanner(System.in);
 		System.out.print("Input task id: ");
-		int id = scanner.nextInt();
+		int id = searchId(scanner.nextInt());
 		try {
 			task.remove(id);
 		}catch(Exception e) {
